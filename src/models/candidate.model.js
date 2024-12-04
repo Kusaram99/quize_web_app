@@ -1,4 +1,4 @@
-import mongoose from "mongoose";
+import mongoose, { Schema } from "mongoose";
 
 const candidateSchema = mongoose.Schema({
   username: {
@@ -9,5 +9,26 @@ const candidateSchema = mongoose.Schema({
   },
 });
 
+const candidateAnsersSchema = mongoose.Schema({
+  candidateId: {
+    type: Schema.Types.ObjectId,
+    ref: "candidatesData",
+    require: true,
+  },
+  questionsId: {
+    type: Schema.Types.ObjectId,
+    ref: "Quiz",
+    require: true,
+  },
+  answers: {
+    type: Schema.Types.Mixed,
+    require: true,
+  },
+});
+
 const CandidateModel = mongoose.model("candidatesData", candidateSchema);
-export default CandidateModel;
+const CandidateAnswerModel = mongoose.model(
+  "candidate_Answers",
+  candidateAnsersSchema
+);
+export { CandidateModel, CandidateAnswerModel };

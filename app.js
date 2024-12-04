@@ -43,7 +43,7 @@ import candidateRouter from './src/routers/candidate.routes.js'
 //user routes declaration
 app.use("/api/v1/users", userRouter)
 app.use("/api/v1/quizzes", quizRouter)
-app.use("/api/v1/candidate", quizRouter)
+app.use("/api/v1/candidate", candidateRouter)
 
 
 

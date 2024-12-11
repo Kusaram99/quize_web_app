@@ -1,21 +1,3 @@
-// import { useState } from "react";
-// import FormContainer from "./components/auth_components/FormContainer";
-// import Navbar from "./components/navbar/Navbar";
-
-// function App() {
-//   const [count, setCount] = useState(0);
-
-//   return (
-//     <>
-//       <Navbar />
-//       <FormContainer />
-//     </>
-//   );
-// }
-
-// export default App;
-
-
 import React from "react";
 import Sidebar from "./components/sidebar/Sidebar";
 import Header from "./components/header/Header";

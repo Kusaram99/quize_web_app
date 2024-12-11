@@ -1,0 +1,12 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@media (max-width: 768px) {
+  .sidebar {
+    display: none;
+  }
+  .header {
+    padding: 2rem;
+  }
+}

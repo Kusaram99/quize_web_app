@@ -1,68 +1,148 @@
-import React from "react";
+import React, { useState } from "react";
+import { IoClose } from "react-icons/io5";
+import { useQuizApiContext } from "../useContexAPI/ContextAPI";
 
-const QuizTitleInfo = () => {
+const QuizTitleInfo = ({ setCollectQuizInfo }) => {
+  const { setQuestions, subjectCategories, setSubjectCategories } =
+    useQuizApiContext();
+  const [subCategoryObject, setSubCategoryObject] = useState({
+    categoryName: "",
+    totalQuestion: "",
+    questions: [],
+  });
+
+  // add category handler
+  const addCategoryHanlder = () => {
+    if (subCategoryObject.categoryName.trim() === "" || !+subCategoryObject.totalQuestion) {
+      alert("Please add subject number and Total questions number")
+      return
+    }; // if string is empty
+    setSubjectCategories((prev) => [...prev, subCategoryObject]);
+    // setCategoryVariable("");
+    setSubCategoryObject((prev) => ({
+      ...prev,
+      categoryName: "",
+      totalQuestion: "",
+    })); 
+  };
+
+  // remove subjectCategories handler
+  const removeCategories = (index) => {
+    // extracting category name
+    // const deletedCategory = subjectCategories[index];
+    // deleting category
+    setSubjectCategories((prev) => prev.filter((_, ind) => ind !== index));
+    // deleting category all questions
+    // setQuestions((prev) =>
+    //   prev.filter((ques) => ques.subjectName !== deletedCategory)
+    // );
+    console.log(subjectCategories)
+  };
+
   return (
     <div className="flex flex-col gap-3 border p-5">
-      <div>
-        <input
-          className="p-2 w-[100%] outline-none border-2 border-blue-100  focus:border-blue-400"
-          type="text"
-          name="quiz_title"
-          placeholder="Type your Quiz Title"
-        />
-      </div>
-
+      <input
+        className="p-2 w-[100%] outline-none border-2 border-blue-100  focus:border-blue-400"
+        type="text"
+        name="title"
+        placeholder="Type your Quiz Title"
+        onChange={(e) =>
+          setCollectQuizInfo((prev) => ({
+            ...prev,
+            [e.target.name]: e.target.value,
+          }))
+        }
+      />
       <div className="flex flex-col gap-4">
-        <input
+        {/* <input
           className="max-w-md p-2 outline-none border-2 border-blue-100  focus:border-blue-400"
           type="number"
-          name="total_questions"
+          min="0"
+          name="totalQuestionsNumber"
           placeholder="Add Total Quizzes No."
-          required
+          onChange={(e) =>
+            setCollectQuizInfo((prev) => ({
+              ...prev,
+              [e.target.name]: e.target.value,
+            }))
+          }
+        /> */}
+        <input
+          className="max-w-md p-2 outline-none border-2 border-blue-100  focus:border-blue-400"
+          type="number"
+          min="0"
+          name="marksPerQuestion"
+          placeholder="Add Marks to Each Question"
+          onChange={(e) =>
+            setCollectQuizInfo((prev) => ({
+              ...prev,
+              [e.target.name]: e.target.value,
+            }))
+          }
         />
         <input
           className="max-w-md p-2 outline-none border-2 border-blue-100  focus:border-blue-400"
           type="number"
-          name="quiz-title"
-          placeholder="Add Mark to Each Question"
-          required
+          min="0"
+          name="timeDuration"
+          placeholder="Add Time duration in minutes"
+          onChange={(e) =>
+            setCollectQuizInfo((prev) => ({
+              ...prev,
+              [e.target.name]: e.target.value,
+            }))
+          }
         />
       </div>
 
       <div className="flex flex-col gap-4">
-        <div className="flex flex-col gap-1">
-          <label for="options">Are Multiple Subject?</label>
-          <select
+        <div className="flex flex-col gap-3">
+          <label>You Can Add Multiple Subjects</label>
+          <input
+            className="max-w-md p-2 outline-none border-2 border-blue-100"
+            type="text"
+            value={subCategoryObject.categoryName}
+            onChange={(e) =>
+              setSubCategoryObject((prev) => ({
+                ...prev,
+                categoryName: e.target.value,
+              }))
+            }
+            placeholder="Subject Name"
+          />
+          <input
             className="max-w-md p-2 outline-none border-2 border-blue-100  focus:border-blue-400"
-            id="options"
-            name="options"
-          >
-            <option value="option2">No</option>
-            <option value="Yes">Yes</option>
-          </select>
-        </div>
-
-        <div className="flex flex-col gap-1">
-          <div className="flex flex-col gap-2">
-            <label>Add Subjects</label>
-
-            <input
-              className="max-w-md p-2 outline-none border-2 border-blue-100"
-              type="text"
-              name=""
-              placeholder="Subject Name"
-            />
-
-            <input
-              className="max-w-md p-2 outline-none border-2 border-blue-100"
-              type="text"
-              name=""
-              placeholder="Subject Name"
-            />
+            type="number"
+            min="0"
+            name="totalQuestionsNumber"
+            placeholder="Add Total Quizzes No."
+            value={subCategoryObject.totalQuestion}
+            onChange={(e) => 
+              setSubCategoryObject((prev) => ({
+                ...prev,
+                totalQuestion: e.target.value,
+              }))
+            }
+          />
+          <div className="flex gap-3">
+            {subjectCategories.map((item, index) => (
+              <div key={index} className=" text-white flex">
+                <span className="p-1 bg-gray-500 rounded">
+                  {item.categoryName}
+                </span>
+                <IoClose
+                  onClick={() => removeCategories(index)}
+                  className="text-sm text-red-500 cursor-pointer"
+                />
+              </div>
+            ))}
           </div>
           <div>
-            <button className="px-5 py-2 bg-gradient-to-bl from-sky-500 to-blue-200 text-white font-bold">
-              Add
+            <button
+              onClick={addCategoryHanlder}
+              className="px-5 py-2 bg-gradient-to-bl from-sky-500 to-blue-200 text-white font-bold"
+            >
+              Add Subject
             </button>
           </div>
         </div>

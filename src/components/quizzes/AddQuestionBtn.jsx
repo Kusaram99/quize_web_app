@@ -1,11 +1,23 @@
 import React from "react";
-import { FaPlus } from "react-icons/fa";
 
-const AddQuestionBtn = () => {
+const AddQuestionBtn = ({ addQuestion, subCategory, index }) => {
+  // console.log("Quiz add button")
   return (
-    <div className="flex items-center justify-center gap-2 font-bold p-4 bg-gradient-to-bl from-sky-500 to-blue-400 text-white cursor-pointer">
-      <FaPlus />
-      <button>ADD QUESTION</button>
+    <div className="flex gap-3 flex-wrap w-[100%]">
+      <button
+        className="font-bold p-4 bg-gradient-to-bl from-gray-500 to-blue-400 text-white cursor-pointer"
+        onClick={() => addQuestion("multiple-choice", subCategory, index)}
+      >
+        Multiple Choice Question
+      </button>
+
+      {/* ======================= pending ========================= */}
+      {/* <button
+        className="font-bold p-4 bg-gradient-to-bl from-green-500 to-green-400 text-white cursor-pointer"
+        onClick={() => addQuestion("checkbox")}
+      >
+        Checkbox Question
+      </button> */}
     </div>
   );
 };

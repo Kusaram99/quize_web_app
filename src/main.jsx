@@ -9,14 +9,16 @@ import {
   Route,
 } from "react-router-dom";
 import QuizComponent from "./components/quizzes/QuizComponent.jsx";
+import { ApiContextProvider } from "./components/useContexAPI/ContextAPI.jsx";  
+// import QuizCreator from "./components/quizzes/QuizComponent.jsx";
 
 // Router
 const router = createBrowserRouter(
   createRoutesFromElements(
     <Route path="/" element={<App />}>
-      <Route path="/create-quiz" element={<QuizComponent/>} />
-      {/* <Route path="/" element={<Home />} />
-      <Route path="/login" element={<LogInContainer />} /> */}
+      <Route path="/create-quiz" element={<QuizComponent />} />
+      {/* {/* <Route path="/" element={<Home />} /> */}
+      {/* <Route path="/login" element={<LogInContainer />} /> */}
       {/* <Route element={<Layouts />}>
         <Route path="todo" element={<FormMainContainer />} />
       </Route> */}
@@ -26,6 +28,8 @@ const router = createBrowserRouter(
 
 createRoot(document.getElementById("root")).render(
   <StrictMode>
-      <RouterProvider router={router} /> 
+    <ApiContextProvider>
+      <RouterProvider router={router} />
+    </ApiContextProvider>
   </StrictMode>
 );

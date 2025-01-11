@@ -6,10 +6,10 @@ const { Schema, model } = mongoose;
 const QuizSchema = new Schema(
   {
     quizInfo: {
-      type: Object,
+      type: Schema.Types.Mixed,
       required: [true, "Quiz information is required"],
     },
-    questions: {
+    subjectCategories: {
       type: Schema.Types.Mixed,
     },
     userId: {
@@ -21,22 +21,18 @@ const QuizSchema = new Schema(
       type: Object,
       default: {}, // Default value for general settings
     },
-    quizDuration: {
-      type: String,
-      required: true,
-    },
-    startingTime: {
-      type: Date, // Use Date for better time handling
-      required: true,
-    },
-    endingTime: {
-      type: Date, // Use Date for better time handling
-      required: true,
-    },
     link: {
       type: String,
     },
-  },
+    status:{
+      type: Boolean,
+      default: true
+    },
+    response:{
+      type:Number,
+      default: 0
+    }
+  },      
   {
     timestamps: true, // Automatically manage createdAt and updatedAt fields
   }

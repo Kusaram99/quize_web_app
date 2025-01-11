@@ -1,11 +1,15 @@
 import { Router } from "express";
-import { candidateAnsers, createCandidate } from "../controllers/candidate.controler.js";
+import {
+  candidateAnswers,
+  createCandidate,
+  isUserReattending,
+} from "../controllers/candidate.controler.js";
 
-const router = Router()
-
+const router = Router();
 
 // routers handler
-router.route('/create').post(createCandidate)
-router.route('/save-answer').post(candidateAnsers)
+router.route("/create").post(createCandidate);
+router.route("/save-answer").post(candidateAnswers);
+router.route("/iscandidate-reattending").post(isUserReattending);
 
-export default router
+export default router;

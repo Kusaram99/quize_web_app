@@ -41,7 +41,7 @@ const registerUser = asyncHandler(async (req, res, next) => {
     });
 
     if (exitedUser) {
-      throw new ApiError(401, "User with email or username already exists");
+      throw new ApiError(401, `User with ${email} and ${username} username already exists`);
     }
 
     // create user
@@ -96,15 +96,15 @@ const registerUser = asyncHandler(async (req, res, next) => {
 // login =========================================================
 const loginUser = asyncHandler(async (req, res) => {
   try {
-    const { email, password } = req.body;
+    const { username, password } = req.body;
 
     // check is user data empty
-    if ([email, password].some((v) => v?.trim() === "")) {
+    if ([username, password].some((v) => v?.trim() === "")) {
       throw new ApiError(401, "All fields are required");
     }
 
     // find the user
-    const user = await UserModel.findOne({ email });
+    const user = await UserModel.findOne({ username });
 
     // check user is existed or not
     if (!user) {

@@ -3,7 +3,7 @@ import { IoClose } from "react-icons/io5";
 import { useQuizApiContext } from "../useContexAPI/ContextAPI";
 
 const QuizTitleInfo = ({ setCollectQuizInfo }) => {
-  const { setQuestions, subjectCategories, setSubjectCategories } =
+  const { subjectCategories, setSubjectCategories } =
     useQuizApiContext();
   const [subCategoryObject, setSubCategoryObject] = useState({
     categoryName: "",
@@ -14,7 +14,7 @@ const QuizTitleInfo = ({ setCollectQuizInfo }) => {
   // add category handler
   const addCategoryHanlder = () => {
     if (subCategoryObject.categoryName.trim() === "" || !+subCategoryObject.totalQuestion) {
-      alert("Please add subject number and Total questions number")
+      alert("Please add subject name and Total questions number")
       return
     }; // if string is empty
     setSubjectCategories((prev) => [...prev, subCategoryObject]);
@@ -53,26 +53,26 @@ const QuizTitleInfo = ({ setCollectQuizInfo }) => {
           }))
         }
       />
-      <div className="flex flex-col gap-4">
-        {/* <input
-          className="max-w-md p-2 outline-none border-2 border-blue-100  focus:border-blue-400"
-          type="number"
-          min="0"
-          name="totalQuestionsNumber"
-          placeholder="Add Total Quizzes No."
-          onChange={(e) =>
-            setCollectQuizInfo((prev) => ({
-              ...prev,
-              [e.target.name]: e.target.value,
-            }))
-          }
-        /> */}
+      <div className="flex flex-col gap-4"> 
         <input
           className="max-w-md p-2 outline-none border-2 border-blue-100  focus:border-blue-400"
           type="number"
           min="0"
           name="marksPerQuestion"
           placeholder="Add Marks to Each Question"
+          onChange={(e) =>
+            setCollectQuizInfo((prev) => ({
+              ...prev,
+              [e.target.name]: e.target.value,
+            }))
+          }
+        />
+        <input
+          className="max-w-md p-2 outline-none border-2 border-blue-100  focus:border-blue-400"
+          type="number"
+          min="0"
+          name="passingMarks"
+          placeholder="Add Passing Marks"
           onChange={(e) =>
             setCollectQuizInfo((prev) => ({
               ...prev,
@@ -115,7 +115,7 @@ const QuizTitleInfo = ({ setCollectQuizInfo }) => {
             type="number"
             min="0"
             name="totalQuestionsNumber"
-            placeholder="Add Total Quizzes No."
+            placeholder="Add Total Questions No."
             value={subCategoryObject.totalQuestion}
             onChange={(e) => 
               setSubCategoryObject((prev) => ({

@@ -7,9 +7,19 @@ const ApiContextForQuiz = createContext();
 export const ApiContextProvider = ({ children }) => {
   const [subjectCategories, setSubjectCategories] = useState([]);
   const [questions, setQuestions] = useState([]);
+  const [auth, setAuth] = useState(JSON.parse(localStorage.getItem('auth')));
 
   return (
-    <ApiContextForQuiz.Provider value={{ subjectCategories, setSubjectCategories, questions, setQuestions }}>
+    <ApiContextForQuiz.Provider
+      value={{
+        subjectCategories,
+        setSubjectCategories,
+        questions,
+        setQuestions,
+        setAuth,
+        auth,
+      }}
+    >
       {children}
     </ApiContextForQuiz.Provider>
   );

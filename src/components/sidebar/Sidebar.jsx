@@ -15,17 +15,26 @@ const Sidebar = () => {
       <hr className="" />
       <div className="flex flex-col gap-10 justify-between p-4">
         <nav className="flex flex-col gap-3 mt-8">
-          <Link to='/' className="flex gap-4 items-center cursor-pointer">
+          <Link
+            to="/home/dashboard"
+            className="flex gap-4 items-center cursor-pointer"
+          >
             <IoMdHome />
             DASHBOARD
           </Link>
-          <Link to="/create-quiz" className="flex gap-4 items-center cursor-pointer">
-            <FaPlus />
-            NEW QUIZ
-          </Link>
-          <Link to="/create-quiz" className="flex gap-4 items-center cursor-pointer">
+          <Link
+            to="/home/create-quiz"
+            className="flex gap-4 items-center cursor-pointer"
+          >
             <FaPlus />
             AI QUIZ
+          </Link>
+          <Link
+            to="/home/create-quiz"
+            className="flex gap-4 items-center cursor-pointer"
+          >
+            <FaPlus />
+            NEW QUIZ
           </Link>
         </nav>
 
@@ -47,8 +56,10 @@ const Sidebar = () => {
 
         {/* Account Section */}
         <div className="flex gap-4 items-center cursor-pointer">
-          <MdAccountCircle className="text-2xl"/>
-          <h1>ACCOUNT</h1>
+          <MdAccountCircle className="text-2xl" />
+          <Link to="updateacccount">
+            <h1>ACCOUNT</h1>
+          </Link>
         </div>
       </div>
     </div>

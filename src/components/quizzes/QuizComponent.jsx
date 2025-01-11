@@ -1,15 +1,17 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
 import QuizTopButton from "./QuizTopButton";
 import QuizTitleInfo from "./QuizTitleInfo";
 import AddQuestionBtn from "./AddQuestionBtn";
 import PreviewSaveBtn from "./PreviewSaveBtn";
 import { useQuizApiContext } from "../useContexAPI/ContextAPI";
 import Questions from "./Questions";
+import { postRequestHandler } from "./postRequestHandler";
 
 const QuizCreator = () => {
-  const { subjectCategories, setSubjectCategories} =
-    useQuizApiContext();
+  const { subjectCategories, setSubjectCategories, auth } = useQuizApiContext();
   const [collectQuizInfo, setCollectQuizInfo] = useState({});
+  const navigate = useNavigate()
 
   // question onchange handler
   const handleQuestionChange = (questionData, questionIndex, categoryIndex) => {
@@ -38,7 +40,7 @@ const QuizCreator = () => {
   const addQuestion = (questionType, subjectName, index) => {
     // if questions are less than total added number
     if (
-      subjectCategories[index].questions.length <=
+      subjectCategories[index].questions.length <
       +subjectCategories[index].totalQuestion
     ) {
       const newQuestion = {
@@ -64,37 +66,45 @@ const QuizCreator = () => {
       );
     } else {
       alert(
-        `You have completed your total number of questions for ${subjectName} Subject`
+        `You have completed your total number ${subjectCategories[index].questions.length} questions for ${subjectName} Subject`
       );
     }
   };
 
   // save questions handler
   const saveQuiz = () => {
+    // if user is not login or signup 
+    if(!auth){
+      alert("Please LogIn")
+      navigate('/home')
+      return
+    }
     if (
       subjectCategories.length >= 1 &&
-      collectQuizInfo.title && 
+      collectQuizInfo.title &&
       +collectQuizInfo.marksPerQuestion &&
       +collectQuizInfo.timeDuration
     ) {
-      let questions = []
-      // iterate all data of all subject
-      for(let data of subjectCategories){
-        questions = [...questions, ...data.questions]
-      }
       const quizData = {
+        userId:auth.id,
         quizInfo: {
           ...collectQuizInfo,
-          subjectCategory: subjectCategories,
         },
-        questions,
+        subjectCategories: subjectCategories,
       };
       console.log("Quiz Data: ", quizData);
+      postRequestHandler(import.meta.env.VITE_CRETE_QUIZ_POST_URL, quizData)
+      navigate("/home/dashboard")
     } else {
       alert("All information is needed of exam topic");
     }
     console.log(subjectCategories);
   };
+
+  // Questions data empty when component run first time
+  useEffect(()=>{
+    setSubjectCategories([])
+  },[])
 
   return (
     <div className="h-[calc(100vh-120px)] bg-gray-200 py-5 overflow-auto">
@@ -102,7 +112,7 @@ const QuizCreator = () => {
         <QuizTopButton />
         <div className="p-3">
           <QuizTitleInfo setCollectQuizInfo={setCollectQuizInfo} />
-          <div className="flex flex-col gap-3 mt-3 border"> 
+          <div className="flex flex-col gap-3 mt-3 border">
             {/* ================================= */}
             {subjectCategories.map((item, index) => (
               <div key={index} className="flex flex-col">
@@ -117,7 +127,7 @@ const QuizCreator = () => {
                         key={innerIndex}
                         questionIndex={innerIndex}
                         categoryIndex={index}
-                        question={question} 
+                        question={question}
                         handleQuestionChange={handleQuestionChange}
                         setSubjectCategories={setSubjectCategories}
                       />

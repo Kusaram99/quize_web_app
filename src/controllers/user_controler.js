@@ -4,7 +4,7 @@ import { ApiError } from "../utils/ApiError.js";
 import { ApiResponse } from "../utils/ApiResponse.js";
 import UserModel from "../models/userModels.js";
 
-// token generator =========================================================
+// token generator ================== Not Implemented =======================================
 const generateAccessAndRefereshTokens = async (userId) => {
   try {
     const user = await UserModel.findById(userId);
@@ -51,7 +51,7 @@ const registerUser = asyncHandler(async (req, res, next) => {
       password,
     });
 
-    console.log("========= ", user._id);
+    // console.log("========= ", user._id);
 
     const { accessToken, refreshToken } = await generateAccessAndRefereshTokens(
       user._id
@@ -191,7 +191,7 @@ const userLogout = asyncHandler(async (req, res, next) => {
   }
 })
 
-// refresh token ===================================================
+// refresh token ======================== not implemented in project ===========================
 const refreshAccessToken = asyncHandler(async (req, res, next) => {
     // console.log("Refresh Token ===============: ", req.body)
     // access kockies

@@ -3,10 +3,10 @@ import mongoose, { Schema } from "mongoose";
 
 const candidateSchema = mongoose.Schema(
   {
-    username: {
-      type: String,
-      unique: true,
-    },
+    // username: {
+    //   type: String,
+    //   unique: true,
+    // },
     fullName: {
       type: String,
     },

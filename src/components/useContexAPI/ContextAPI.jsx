@@ -6,18 +6,26 @@ const ApiContextForQuiz = createContext();
 // Create a Provider Component
 export const ApiContextProvider = ({ children }) => {
   const [subjectCategories, setSubjectCategories] = useState([]);
-  const [questions, setQuestions] = useState([]);
-  const [auth, setAuth] = useState(JSON.parse(localStorage.getItem('auth')));
+  const [previewData, setPreviewData] = useState([]);
+  const [auth, setAuth] = useState(JSON.parse(localStorage.getItem("auth")));
+  const [collectQuizInfo, setCollectQuizInfo] = useState({
+    title: "",
+    marksPerQuestion: "",
+    timeDuration: "",
+    passingMarks: "",
+  });
 
   return (
     <ApiContextForQuiz.Provider
       value={{
         subjectCategories,
         setSubjectCategories,
-        questions,
-        setQuestions,
+        previewData,
+        setPreviewData,
         setAuth,
         auth,
+        collectQuizInfo,
+        setCollectQuizInfo,
       }}
     >
       {children}

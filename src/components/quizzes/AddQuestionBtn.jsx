@@ -5,7 +5,7 @@ const AddQuestionBtn = ({ addQuestion, subCategory, index }) => {
   return (
     <div className="flex gap-3 flex-wrap w-[100%]">
       <button
-        className="font-bold p-4 bg-gradient-to-bl from-gray-500 to-blue-400 text-white cursor-pointer"
+        className="font-bold p-4 bg-gradient-to-bl from-sky-400 to-green-950 text-white cursor-pointer"
         onClick={() => addQuestion("multiple-choice", subCategory, index)}
       >
         Multiple Choice Question

@@ -62,7 +62,7 @@ useEffect(()=>{
 },[])
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gray-100 px-4">
+    <div className="h-[calc(100vh-64px)] flex items-center justify-center bg-gray-100 px-4">
       <div className="w-full max-w-md bg-white rounded-lg shadow-md p-6">
         <h2 className="text-2xl font-bold mb-6 text-center text-gray-800">
           Update Account

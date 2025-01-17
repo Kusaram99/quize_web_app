@@ -16,7 +16,7 @@ const Header = () => {
   }
 
   return (
-    <header className="h-[64px] flex justify-between items-center px-10 py-4 bg-gradient-to-bl from-sky-500 to-blue-400">
+    <header className="h-[64px] flex justify-between items-center px-10 py-4 bg-gradient-to-bl from-sky-400 to-green-950">
       <h1 className="text-lg"></h1>
       <div className="flex gap-5">
         {!auth ? (

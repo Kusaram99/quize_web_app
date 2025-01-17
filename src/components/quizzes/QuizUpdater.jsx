@@ -1,10 +1,10 @@
-import React, { useCallback, useState } from "react";
+import React, { useState } from "react";
 import { MdDelete } from "react-icons/md";
 import { FaBars } from "react-icons/fa";
 import { IoIosArrowDropdown } from "react-icons/io";
 import { IoIosArrowDropup } from "react-icons/io";
 
-const Questions = ({
+const QuizUpdater = ({
   question,
   questionIndex,
   categoryIndex,
@@ -54,8 +54,8 @@ const Questions = ({
   };
 
   // Delete a question
-  const deleteQuestion = useCallback((catgIndex, quesIndex,catgName) => {
-    // console.log("Delete: ", catgName)
+  const deleteQuestion = (catgIndex, quesIndex,catgName) => {
+    // console.log(catgName)
     setSubjectCategories((prev) =>
       prev.map((category, index) => {
         if (index === catgIndex  && category.categoryName === catgName) {
@@ -66,11 +66,10 @@ const Questions = ({
         return category;
       })
     );
-  },[]);
+  };
 
   // Delete an option
-  const deleteOption = useCallback((catgIndex, quesIndex, optIndex) => {
-    // console.log("current option index: ", optIndex)
+  const deleteOption = (catgIndex, quesIndex, optIndex) => {
     setSubjectCategories((prev) =>
       prev.map((category, index) => {
         if (index === catgIndex) {
@@ -78,14 +77,10 @@ const Questions = ({
           const currentQuesion = toupdateData.questions[quesIndex];
           // if options are only two then don't delete
           if (currentQuesion.options.length > 2) {
-            
             currentQuesion.options = currentQuesion.options.filter(
-              (_, ind) => ind !== optIndex
+              (_, ind) => ind != optIndex
             );
           }
-          // console.log("currentQuesion: ",currentQuesion)
-          // console.log("Option index:=====> ", optIndex);
-          
           toupdateData.questions[quesIndex] = currentQuesion;
           return toupdateData;
         } else {
@@ -93,7 +88,7 @@ const Questions = ({
         }
       })
     );
-  },[]);
+  };
 
   return (
     <div className="my-2">
@@ -196,4 +191,4 @@ const Questions = ({
   );
 };
 
-export default Questions;
+export default QuizUpdater;

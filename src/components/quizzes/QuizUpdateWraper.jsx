@@ -1,32 +1,30 @@
 import React, { useEffect, useState } from "react";
-import { useNavigate, useLocation } from "react-router-dom";
+import { useNavigate, useParams, useLocation } from "react-router-dom";
 import QuizTopButton from "./QuizTopButton";
 import QuizTitleInfo from "./QuizTitleInfo";
 import AddQuestionBtn from "./AddQuestionBtn";
-import PreviewAndSaveBtn from "./PreviewAndSaveBtn";
+import PreviewSaveBtn from "./PreviewAndSaveBtn";
 import { useQuizApiContext } from "../useContexAPI/ContextAPI";
-import Questions from "./Questions";
 import { postRequestHandler } from "./quizRequestHandler";
+import QuizUpdater from "./QuizUpdater";
+import UpdateBtn from "./UpdateBtn";
 
-const QuizCreator = () => {
-  const {
-    subjectCategories,
-    setSubjectCategories,
-    auth,
-    collectQuizInfo,
-    setCollectQuizInfo,
-  } = useQuizApiContext();
-
+const QuizUpdateWraper = () => {
+  const { subjectCategories, setSubjectCategories, auth, collectQuizInfo, setCollectQuizInfo } = useQuizApiContext();
   const navigate = useNavigate();
+  const params = useParams();
+  const location = useLocation();
+  // const [collectQuizInfo, setCollectQuizInfo] = useState({
+  //   title: "",
+  //   marksPerQuestion: "",
+  //   timeDuration: "",
+  //   passingMarks: "",
+  // });
   const [subCategoryObject, setSubCategoryObject] = useState({
     categoryName: "",
     totalQuestion: "",
     questions: [],
   });
-  const [isLoading, setIsLoading] = useState(false);
-
-  // to get url state data
-  const previousLocation = useLocation();
 
   // question onchange handler
   const handleQuestionChange = (questionData, questionIndex, categoryIndex) => {
@@ -94,7 +92,6 @@ const QuizCreator = () => {
       navigate("/home");
       return;
     }
-    setIsLoading(true);
     if (
       subjectCategories.length >= 1 &&
       collectQuizInfo.title &&
@@ -115,7 +112,6 @@ const QuizCreator = () => {
       );
       navigate("/home/dashboard");
     } else {
-      setIsLoading(false);
       alert("All information is needed of exam topic");
     }
     // console.log(subjectCategories);
@@ -123,22 +119,18 @@ const QuizCreator = () => {
 
   // Questions data empty when component run first time
   useEffect(() => {
-    // console.log("previousLocation: ", previousLocation);
-    // don't delete all quiz data if user come back from preview page
-    if (previousLocation.state === "preview") return;
-
-    // set empty data when component run first time
-    setSubjectCategories([]);
-    setCollectQuizInfo((prev) => ({
-      title: "",
-      marksPerQuestion: "",
-      timeDuration: "",
-      passingMarks: "",
-    }));
+    // setSubjectCategories([])
+    // console.log("Params: ", params);
+    // console.log("Location: ", location.state);
+    const data = location.state;
+    if (data) {
+      setSubjectCategories(data.subjectCategories);
+      setCollectQuizInfo(data.quizInfo);
+    }
   }, []);
 
   return (
-    <div className="h-[calc(100vh-64px)] bg-gray-200 py-5 overflow-auto">
+    <div className="h-[calc(100vh-120px)] bg-gray-200 py-5 overflow-auto">
       <div className="max-w-[1160px] mx-auto border border-gray-300 bg-gray-50">
         <QuizTopButton />
         <div className="p-3">
@@ -159,7 +151,7 @@ const QuizCreator = () => {
                 {item.questions.map((question, innerIndex) => {
                   if (question.subjectName === item.categoryName) {
                     return (
-                      <Questions
+                      <QuizUpdater
                         key={innerIndex}
                         questionIndex={innerIndex}
                         categoryIndex={index}
@@ -182,17 +174,13 @@ const QuizCreator = () => {
                 />
               </div>
             ))}
-            {/* ============== Loading part  =================== */}
+            {/* ================================= */}
           </div>
-          {isLoading ? (
-            <p className="px-5 py-5 text-right">Loading...</p>
-          ) : (
-            <PreviewAndSaveBtn saveQuiz={saveQuiz} />
-          )}
+          <UpdateBtn quizId={params}/>
         </div>
       </div>
     </div>
   );
 };
 
-export default QuizCreator;
+export default QuizUpdateWraper;

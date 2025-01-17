@@ -44,7 +44,7 @@ const FormContainer = () => {
   // handle signUp data
   const handleSubmitSignup = async (e) => {
     e.preventDefault();
-    // console.log("SignUp Data Submitted:", signupnData);
+    // // console.log("SignUp Data Submitted:", signupnData);
     // if any data is empty
     if (
       !signupnData.email ||
@@ -73,7 +73,7 @@ const FormContainer = () => {
   // handle login data
   const handleSubmitLogin = async (e) => {
     e.preventDefault();
-    // console.log("Login Data Submitted:", loginData);
+    // // console.log("Login Data Submitted:", loginData);
     // if input boxes data are empty
     if (!loginData.username || !loginData.password) {
       alert("Please fill all input box!");
@@ -94,10 +94,10 @@ const FormContainer = () => {
     try {
       const response = await axios.post(url, data);
       // check response
-      console.log("Successfully authenticated!: ", response); 
+      // console.log("Successfully authenticated!: ", response); 
       localStorage.setItem("auth", JSON.stringify({id: response.data.data.user._id }))
       setAuth({id: response.data.data.user._id })
-      navigator("/home");
+      navigator("/home/dashboard");
     } catch (err) {
       setLoaderHandler((prev) => ({ ...prev, signUp: false }));
       setLoaderHandler((prev) => ({ ...prev, login: false }));

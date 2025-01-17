@@ -1,7 +1,7 @@
-import React from "react";
+import React from "react"; 
 
-const QuestionBox = ({ question, index, saveChanges }) => {
-  // console.log(question);
+const QuestionBox = ({ question, index, saveOnchange }) => {
+  // // console.log(question);
   return (
     <div className="flex-row flex items-start justify-center py-6 w-full">
       <div className="bg-white shadow-lg rounded-lg p-6 w-full">
@@ -17,7 +17,7 @@ const QuestionBox = ({ question, index, saveChanges }) => {
                 <li key={innerIndex}>
                   <div className="flex gap-5 items-center justify-start bg-gray-50 p-3 rounded-lg shadow-sm">
                     <input
-                      onChange={() => saveChanges(index, innerIndex+1)}
+                      onChange={() => saveOnchange(index, innerIndex+1)}
                       type="radio"
                       checked={question?.candidateAnswer === innerIndex + 1? true : false}
                       name={`question_${question?.id}`}
@@ -36,3 +36,7 @@ const QuestionBox = ({ question, index, saveChanges }) => {
 };
 
 export default QuestionBox;
+
+
+
+

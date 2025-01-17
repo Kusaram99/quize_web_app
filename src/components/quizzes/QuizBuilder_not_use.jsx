@@ -107,7 +107,7 @@ const QuizBuilder = () => {
         correctOption: q.correctOption,
       })),
     };
-    console.log(finalQuiz); // Send this to your backend or display
+    // console.log(finalQuiz); // Send this to your backend or display
   };
 
   return (

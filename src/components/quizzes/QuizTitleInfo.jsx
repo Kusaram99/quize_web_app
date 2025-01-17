@@ -2,28 +2,30 @@ import React, { useState } from "react";
 import { IoClose } from "react-icons/io5";
 import { useQuizApiContext } from "../useContexAPI/ContextAPI";
 
-const QuizTitleInfo = ({ setCollectQuizInfo }) => {
-  const { subjectCategories, setSubjectCategories } =
-    useQuizApiContext();
-  const [subCategoryObject, setSubCategoryObject] = useState({
-    categoryName: "",
-    totalQuestion: "",
-    questions: [],
-  });
+const QuizTitleInfo = ({
+  collectQuizInfo,
+  setCollectQuizInfo,
+  subCategoryObject,
+  setSubCategoryObject,
+}) => {
+  const { subjectCategories, setSubjectCategories } = useQuizApiContext();
 
   // add category handler
   const addCategoryHanlder = () => {
-    if (subCategoryObject.categoryName.trim() === "" || !+subCategoryObject.totalQuestion) {
-      alert("Please add subject name and Total questions number")
-      return
-    }; // if string is empty
+    if (
+      subCategoryObject.categoryName.trim() === "" ||
+      !+subCategoryObject.totalQuestion
+    ) {
+      alert("Please add subject name and Total questions number");
+      return;
+    } // if string is empty
     setSubjectCategories((prev) => [...prev, subCategoryObject]);
     // setCategoryVariable("");
     setSubCategoryObject((prev) => ({
       ...prev,
       categoryName: "",
       totalQuestion: "",
-    })); 
+    }));
   };
 
   // remove subjectCategories handler
@@ -36,16 +38,18 @@ const QuizTitleInfo = ({ setCollectQuizInfo }) => {
     // setQuestions((prev) =>
     //   prev.filter((ques) => ques.subjectName !== deletedCategory)
     // );
-    console.log(subjectCategories)
+    // console.log(subjectCategories);
   };
 
   return (
     <div className="flex flex-col gap-3 border p-5">
+      <label className="font-medium">Type your quiz title</label>
       <input
         className="p-2 w-[100%] outline-none border-2 border-blue-100  focus:border-blue-400"
         type="text"
         name="title"
-        placeholder="Type your Quiz Title"
+        placeholder="Type your quiz title"
+        value={collectQuizInfo.title}
         onChange={(e) =>
           setCollectQuizInfo((prev) => ({
             ...prev,
@@ -53,53 +57,70 @@ const QuizTitleInfo = ({ setCollectQuizInfo }) => {
           }))
         }
       />
-      <div className="flex flex-col gap-4"> 
-        <input
-          className="max-w-md p-2 outline-none border-2 border-blue-100  focus:border-blue-400"
-          type="number"
-          min="0"
-          name="marksPerQuestion"
-          placeholder="Add Marks to Each Question"
-          onChange={(e) =>
-            setCollectQuizInfo((prev) => ({
-              ...prev,
-              [e.target.name]: e.target.value,
-            }))
-          }
-        />
-        <input
-          className="max-w-md p-2 outline-none border-2 border-blue-100  focus:border-blue-400"
-          type="number"
-          min="0"
-          name="passingMarks"
-          placeholder="Add Passing Marks"
-          onChange={(e) =>
-            setCollectQuizInfo((prev) => ({
-              ...prev,
-              [e.target.name]: e.target.value,
-            }))
-          }
-        />
-        <input
-          className="max-w-md p-2 outline-none border-2 border-blue-100  focus:border-blue-400"
-          type="number"
-          min="0"
-          name="timeDuration"
-          placeholder="Add Time duration in minutes"
-          onChange={(e) =>
-            setCollectQuizInfo((prev) => ({
-              ...prev,
-              [e.target.name]: e.target.value,
-            }))
-          }
-        />
+      <div className="flex flex-col gap-4">
+        <div className="flex flex-col gap-1">
+          <label className="font-medium">
+            Add marks to each question (Like 1 to 2)
+          </label>
+          <input
+            className="max-w-md p-2 outline-none border-2 border-blue-100  focus:border-blue-400"
+            type="number"
+            min="0"
+            name="marksPerQuestion"
+            placeholder="Add marks to each question"
+            value={collectQuizInfo.marksPerQuestion}
+            onChange={(e) =>
+              setCollectQuizInfo((prev) => ({
+                ...prev,
+                [e.target.name]: e.target.value,
+              }))
+            }
+          />
+        </div>
+
+        <div className="flex flex-col gap-1">
+          <label className="font-medium">Add passing marks to pass</label>
+          <input
+            className="max-w-md p-2 outline-none border-2 border-blue-100  focus:border-blue-400"
+            type="number"
+            min="0"
+            name="passingMarks"
+            placeholder="Add passing marks to pass"
+            value={collectQuizInfo.passingMarks}
+            onChange={(e) =>
+              setCollectQuizInfo((prev) => ({
+                ...prev,
+                [e.target.name]: e.target.value,
+              }))
+            }
+          />
+        </div>
+        <div className="flex flex-col gap-1">
+          <label className="font-medium">
+            Add time duration in minutes to test
+          </label>
+          <input
+            className="max-w-md p-2 outline-none border-2 border-blue-100  focus:border-blue-400"
+            type="number"
+            min="0"
+            name="timeDuration"
+            placeholder="Add Time duration in minutes"
+            value={collectQuizInfo.timeDuration}
+            onChange={(e) =>
+              setCollectQuizInfo((prev) => ({
+                ...prev,
+                [e.target.name]: e.target.value,
+              }))
+            }
+          />
+        </div>
       </div>
 
       <div className="flex flex-col gap-4">
         <div className="flex flex-col gap-3">
-          <label>You Can Add Multiple Subjects</label>
+          <label className="font-medium">You Can Add Multiple Subjects</label>
           <input
-            className="max-w-md p-2 outline-none border-2 border-blue-100"
+            className="max-w-md p-2 outline-none border-2 border-blue-100 focus:border-blue-400"
             type="text"
             value={subCategoryObject.categoryName}
             onChange={(e) =>
@@ -115,9 +136,9 @@ const QuizTitleInfo = ({ setCollectQuizInfo }) => {
             type="number"
             min="0"
             name="totalQuestionsNumber"
-            placeholder="Add Total Questions No."
+            placeholder="Add Total number of questions"
             value={subCategoryObject.totalQuestion}
-            onChange={(e) => 
+            onChange={(e) =>
               setSubCategoryObject((prev) => ({
                 ...prev,
                 totalQuestion: e.target.value,
@@ -140,7 +161,7 @@ const QuizTitleInfo = ({ setCollectQuizInfo }) => {
           <div>
             <button
               onClick={addCategoryHanlder}
-              className="px-5 py-2 bg-gradient-to-bl from-sky-500 to-blue-200 text-white font-bold"
+              className="px-5 py-2 bg-gradient-to-bl from-sky-400 to-green-950 text-white font-bold"
             >
               Add Subject
             </button>

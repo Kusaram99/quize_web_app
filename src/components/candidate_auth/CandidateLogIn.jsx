@@ -1,17 +1,22 @@
 import React, { useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import { useQuizApiContext } from "../useContexAPI/ContextAPI";
+import {
+  saveCandidateData,
+  checkCandidateTestStatus,
+  checkLink,
+  getQuizId,
+} from "./candidateRequestHandler";
 
 const CandidateLogIn = () => {
+  const [isLoading, setIsLoading] = useState(false);
+  const navigator = useNavigate();
+  const params = useParams();
+  // const { auth } = useQuizApiContext();
 
-  const navigator = useNavigate()
-  const {auth} = useQuizApiContext()
-
-  const [formData, setFormData] = useState({
-    username: "",
+  const [formData, setFormData] = useState({ 
     email: "",
-    password: "",
-    fullName:""
+    fullName: "",
   });
 
   const [errors, setErrors] = useState({});
@@ -27,19 +32,17 @@ const CandidateLogIn = () => {
   const validateInput = (name, value) => {
     let errorMsg = "";
 
-    if (name === "username" && value.trim() === "") {
-      errorMsg = "Username is required.";
-    } else if (name === "email" && !/^\S+@\S+\.\S+$/.test(value)) {
+    if (name === "email" && !/^\S+@\S+\.\S+$/.test(value)) {
       errorMsg = "Invalid email address.";
-    } else if (name === "password" && value.length < 6) {
-      errorMsg = "Password must be at least 6 characters.";
+    } else if (name === "fullName" && value.trim() === "" && value.length < 3) {
+      errorMsg = "Full name is required";
     }
 
     setErrors((prev) => ({ ...prev, [name]: errorMsg }));
   };
 
   // Form Submit Handler
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     const validationErrors = {};
     Object.keys(formData).forEach((key) => {
@@ -51,16 +54,64 @@ const CandidateLogIn = () => {
     setErrors(validationErrors);
 
     if (Object.keys(validationErrors).length === 0) {
-      console.log("Form submitted successfully:", formData);
-    }
-  };
+      // convert form data in lowercase to each field
+      const formDataLower = Object.keys(formData).reduce((acc, key) => {
+        if (key === "fullName") {
+          acc[key] = formData[key];
+          return acc;
+        }
+        acc[key] = formData[key].toLowerCase();
+        return acc;
+      }, {});
+      // // console.log("Form data in lowercase: ", formDataLower);
+      // send request to save candidate data
+      const data = await saveCandidateData(formDataLower, setIsLoading);
+      // // console.log("Data: ", data);
+      // // console.log("candidateId: ", data.data._id);
+      // // console.log("quiz: ", params.id);
+      // alert(data.message);
+      // calling getQuizId to get quiz id to check user have done this quiz before or not
+      // console.log("Form submitted successfully:", formData);
+      const response = await getQuizId(params.id)
 
-// check user login or not
-useEffect(()=>{
-    if(!auth){ 
-        navigator("/home/authentication")
-    }
-},[])
+      // console.log("Quiz ID: ",response.data.quizId)
+      // return
+      // calling this function to know candidate is submited test or not
+      const checkTestStatus = await checkCandidateTestStatus({
+        candidateId: data.data._id, 
+        quizId: response.data.quizId,
+      });
+
+      // console.log("checkTestStatus of candidate: ", checkTestStatus);
+      // console.log("candidate response: ", data.data._id); 
+      // if candidate is not submited test
+      if (checkTestStatus.data.status === false) {
+        // navigate to examination page
+        // console.log("new candidate: ", checkTestStatus.data)
+        navigator(`/examinstruction?link=${params.id}&u_id=${data.data._id}`);
+        // // console.log("Candidate Id in Submit handler: ", data.data._id);
+        return
+      }
+
+      // if candidate is submited test already then show message and navigate to successful page
+      // alert(checkTestStatus.message)
+      // console.log("Check Test Status: ", checkTestStatus.data.status); 
+      navigator(`/successful/${data.data._id}`);
+    } 
+  }; 
+
+  useEffect(() => {
+    // // console.log("link is valid or not: ", params.id)
+    // calling chechk link function to check link is valid or not
+    checkLink(params.id).then((data) => {
+      // console.log("Check Link: ", data);
+      // Check link is valid or not
+      if (data.data.status === false) {
+        alert(data.message);
+        navigator("/error/404");
+      }
+    });
+  }, []);
 
   return (
     <div className="min-h-screen flex items-center justify-center bg-gray-100 px-4">
@@ -68,48 +119,39 @@ useEffect(()=>{
         <h2 className="text-2xl font-bold mb-6 text-center text-gray-800">
           Enter your Details
         </h2>
-        <form onSubmit={handleSubmit} className="space-y-4">
-          {/* Username Field */}
-          <div>
-            <label htmlFor="username" className="block text-sm font-medium text-gray-600">
-              Username
-            </label>
-            <input
-              type="text"
-              id="username"
-              name="username"
-              value={formData.username}
-              onChange={handleChange}
-              className={`w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 ${
-                errors.username ? "border-red-500 focus:ring-red-300" : "border-gray-300 focus:ring-sky-300"
-              }`}
-              placeholder="Enter your username"
-            />
-            {errors.username && <p className="text-red-500 text-sm mt-1">{errors.username}</p>}
-          </div>
-
+        <form onSubmit={handleSubmit} className="space-y-4"> 
           {/* Full name */}
           <div>
-            <label htmlFor="username" className="block text-sm font-medium text-gray-600">
+            <label
+              htmlFor="username"
+              className="block text-sm font-medium text-gray-600"
+            >
               Full Name
             </label>
             <input
               type="text"
               id="username"
-              name="username"
+              name="fullName"
               value={formData.fullName}
               onChange={handleChange}
               className={`w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 ${
-                errors.fullName ? "border-red-500 focus:ring-red-300" : "border-gray-300 focus:ring-sky-300"
+                errors.fullName
+                  ? "border-red-500 focus:ring-red-300"
+                  : "border-gray-300 focus:ring-sky-300"
               }`}
               placeholder="Enter your username"
             />
-            {errors.fullName && <p className="text-red-500 text-sm mt-1">{errors.fullName}</p>}
+            {errors.fullName && (
+              <p className="text-red-500 text-sm mt-1">{errors.fullName}</p>
+            )}
           </div>
 
           {/* Email Field */}
           <div>
-            <label htmlFor="email" className="block text-sm font-medium text-gray-600">
+            <label
+              htmlFor="email"
+              className="block text-sm font-medium text-gray-600"
+            >
               Email
             </label>
             <input
@@ -119,11 +161,15 @@ useEffect(()=>{
               value={formData.email}
               onChange={handleChange}
               className={`w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 ${
-                errors.email ? "border-red-500 focus:ring-red-300" : "border-gray-300 focus:ring-sky-300"
+                errors.email
+                  ? "border-red-500 focus:ring-red-300"
+                  : "border-gray-300 focus:ring-sky-300"
               }`}
               placeholder="Enter your email"
             />
-            {errors.email && <p className="text-red-500 text-sm mt-1">{errors.email}</p>}
+            {errors.email && (
+              <p className="text-red-500 text-sm mt-1">{errors.email}</p>
+            )}
           </div>
 
           {/* Password Field */}

@@ -6,7 +6,7 @@ import FormContainer from "../auth_components/FormContainer";
 const PrivateRouter = () => {
   // const { authData } = useQuizApiContext();
   auth = JSON.parse(localStorage.getItem('auth')) || null
-  console.log("authDAta: ", auth)
+  // console.log("authDAta: ", auth)
   const navigator = useNavigate();
   return auth ? navigator("/dashboard") : <FormContainer />;
 };
